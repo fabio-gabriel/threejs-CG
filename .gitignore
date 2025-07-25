@@ -1,0 +1,8 @@
+# Ignore everything unecessary
+
+node_modules/
+
+package-lock.json
+package.json
+
+.eslintcache
