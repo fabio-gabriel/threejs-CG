@@ -15,7 +15,7 @@ const controls = createControls(camera, renderer)
 const scene = new THREE.Scene()
 
 let water
-loadEnvironment(scene, 'assets/hdr/secluded_beach_2k.hdr', () => {water = createWater(scene)}) 
+loadEnvironment(scene, 'assets/hdr/secluded_beach_2k.hdr', () => {water = createWater(scene)})  // Custom shader from three.js for water
 
 const geo = new THREE.IcosahedronGeometry(1.0, 2)
 const mat = new THREE.MeshStandardMaterial({
@@ -36,6 +36,7 @@ mesh.add(wireMesh)
 
 function animate(t = 0) {
     requestAnimationFrame(animate)
+    if (water) water.material.uniforms['time'].value += 0.5 / 60.0 // water
     mesh.rotation.y = t * 0.001
     mesh.rotation.x = t * 0.001
     // mesh.scale.setScalar(Math.cos(t * 0.001) + 0.5)
