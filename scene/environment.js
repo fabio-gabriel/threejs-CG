@@ -6,7 +6,7 @@ export function loadEnvironment(scene, path, callback = () => {}) {
   loader.load(path, (texture) => {
     texture.mapping = THREE.EquirectangularReflectionMapping
     scene.background = texture
-    scene.environment = texture
+    scene.environment = texture // Immage-Based Lighting (IBL)
     callback(texture)
   })
 }
