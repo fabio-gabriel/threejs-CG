@@ -3,4 +3,4 @@
 node_modules/
 
 .eslintcache
-.eslint.config.mjs
+eslint.config.mjs

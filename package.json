@@ -1,0 +1,29 @@
+{
+  "name": "three",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint . --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabio-gabriel/threejs-CG.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fabio-gabriel/threejs-CG/issues"
+  },
+  "homepage": "https://github.com/fabio-gabriel/threejs-CG#readme",
+  "dependencies": {
+    "@dimforge/rapier3d": "^0.18.0",
+    "eslint": "^9.32.0",
+    "three": "^0.178.0"
+  },
+  "devDependencies": {
+    "vite": "^7.0.6",
+    "vite-plugin-wasm": "^3.5.0"
+  }
+}

@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Water } from 'jsm/objects/Water.js'
+import { Water } from 'three/examples/jsm/objects/Water.js'
 
 export function createWater(scene) {
   const waterGeometry = new THREE.PlaneGeometry(10000, 10000)
