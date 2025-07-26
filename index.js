@@ -28,10 +28,10 @@ ship.traverse(child => {
     child.receiveShadow = true
 })
 
-const numBodies = 10;
+const numBodies = 1;
 const bodies = [];
 for (let i = 0; i < numBodies; i++) {
-  const body = getBody(RAPIER, world, ship, [0, 5, -7], 0.1);
+  const body = getBody(RAPIER, world, ship, [0, 10, -7], 0.1);
   bodies.push(body);
   scene.add(body.mesh);
 }
@@ -39,8 +39,9 @@ for (let i = 0; i < numBodies; i++) {
 function animate(t = 0) {
     requestAnimationFrame(animate)
     if (water) {water.material.uniforms['time'].value += 0.5 / 60.0} // water
+    world.step()
+    bodies.forEach(b => b.update(t * 0.001))
     // mesh.scale.setScalar(Math.cos(t * 0.001) + 0.5)
-    bodies.forEach(b => b.update());
     renderer.render(scene, camera)
     controls.update()
 }
