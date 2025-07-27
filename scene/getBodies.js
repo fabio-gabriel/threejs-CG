@@ -48,7 +48,7 @@ function getBody(RAPIER, world, model, translation, scale, randomPositions = fal
 
       // Buoyancy Calculation 
       const shipBottomY = pos.y; // Approximate bottom of the ship's collider
-      let submergedDepth = Math.max(0, 3 - shipBottomY); // How far below water the bottom is. Water level is set to 3 because I am only approximating buoyancy and the values are not perfect.
+      let submergedDepth = Math.max(0, 3 - shipBottomY); // How far below water the bottom is. Water level is set to 3 because density is not uniform throughout a real ship and it needs to be there to compensate this.
 
       // This is a real rough approximation of volume
       const estimatedSubmergedVolume = submergedDepth * (modelSize.x * modelSize.z); // Assuming a cube base
@@ -67,12 +67,52 @@ function getBody(RAPIER, world, model, translation, scale, randomPositions = fal
         rigid.setLinvel(
             {
                 x: linearVelocity.x * dampingFactor,
-                y: linearVelocity.y * dampingFactor, // 
+                y: linearVelocity.y * dampingFactor,
                 z: linearVelocity.z * dampingFactor
             },
             true
         );
       }
+
+      // Righting Moment (Torque) Calculation
+      const currentRotation = rigid.rotation();
+      const currentQuaternion = new THREE.Quaternion(currentRotation.x, currentRotation.y, currentRotation.z, currentRotation.w);
+
+      // Get the normal vector of the ship in world coordinates
+      const shipUp = new THREE.Vector3(0, 1, 0).applyQuaternion(currentQuaternion);
+
+      // The target normal vector is simply (0, 1, 0)
+        const targetUp = new THREE.Vector3(0, 1, 0);
+
+      // Calculate the angle between the ship's normal and the world's normal
+      const angle = shipUp.angleTo(targetUp);
+
+      if (angle > 0.01) { 
+          const rotationAxis = new THREE.Vector3().crossVectors(shipUp, targetUp).normalize();
+
+          // The magnitude of the restoring torque
+          // This is a simplified model. A more accurate one would involve something called metacentric height (according to wikipedia, I am not a naval engineer)
+          const torqueMagnitude = angle * restoringForceMultiplier;
+
+          const rapierTorque = new RAPIER.Vector3(
+                rotationAxis.x * torqueMagnitude,
+                rotationAxis.y * torqueMagnitude,
+                rotationAxis.z * torqueMagnitude
+          );
+          rigid.addTorque(rapierTorque, true);
+        }
+
+        // Angular Damping 
+        const angularVelocity = rigid.angvel();
+        const angularDampingFactor = 0.9;
+        rigid.setAngvel(
+            {
+                x: angularVelocity.x * angularDampingFactor,
+                y: angularVelocity.y * angularDampingFactor,
+                z: angularVelocity.z * angularDampingFactor
+            },
+            true
+        );
     }
     return { mesh, rigid, update };
   }
