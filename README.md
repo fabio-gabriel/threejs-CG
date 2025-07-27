@@ -2,7 +2,7 @@
 
 Github Link: https://github.com/fabio-gabriel/threejs-CG
 
-Final project for the Computer Graphics 2025.1 class. Here you will find a three.js scene of some old timey ships floating in the ocean.
+Final project for the Computer Graphics 2025.1 class. Here you will find a three.js scene of some old timey ships floating in the ocean. You can click on the ship to push it around.
 
 ## how to run 
 `npx vite`

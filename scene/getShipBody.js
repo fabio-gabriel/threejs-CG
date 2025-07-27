@@ -49,7 +49,7 @@ function getShip(RAPIER, world, model, translation, scale) {
       // Apply the upward buoyant force
       if (submergedDepth > 0) {
         const waveInfluence = Math.random() * 2 - 1 // Randomize the influence to add some bobbing to simulate waves
-        buoyancyForceMagnitude *= (1 + waveInfluence); // Apply variation to the force
+        buoyancyForceMagnitude *= (1 + waveInfluence);
 
         const buoyancyForce = new RAPIER.Vector3(0, buoyancyForceMagnitude, 0);
         rigid.addForce(buoyancyForce, true); 
@@ -73,7 +73,7 @@ function getShip(RAPIER, world, model, translation, scale) {
       // Get the normal vector of the ship in world coordinates
       const shipUp = new THREE.Vector3(0, 1, 0).applyQuaternion(currentQuaternion);
 
-      // The target normal vector is simply (0, 1, 0)
+      // The target normal vector (up) is (0, 1, 0)
       const targetUp = new THREE.Vector3(0, 1, 0);
 
       // Calculate the angle between the ship's normal and the world's normal
