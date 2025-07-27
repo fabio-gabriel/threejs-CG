@@ -18,6 +18,7 @@ export function createWater(scene) {
     fog: false
   })
 
+  water.material.side = THREE.DoubleSide;
   water.rotation.x = -Math.PI / 2
   scene.add(water)
   return water

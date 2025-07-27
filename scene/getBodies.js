@@ -49,7 +49,6 @@ function getBody(RAPIER, world, model, translation, scale, randomPositions = fal
 
       // Apply the upward buoyant force
       if (submergedDepth > 0) {
-         console.log(Math.random() * 2 - 1)
         const waveInfluence = Math.random() * 2 - 1 // Small sine wave for bobbing
         buoyancyForceMagnitude *= (1 + waveInfluence); // Apply variation to the force
 
