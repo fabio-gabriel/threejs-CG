@@ -74,7 +74,7 @@ function getShip(RAPIER, world, model, translation, scale) {
       const shipUp = new THREE.Vector3(0, 1, 0).applyQuaternion(currentQuaternion);
 
       // The target normal vector is simply (0, 1, 0)
-        const targetUp = new THREE.Vector3(0, 1, 0);
+      const targetUp = new THREE.Vector3(0, 1, 0);
 
       // Calculate the angle between the ship's normal and the world's normal
       const angle = shipUp.angleTo(targetUp);
@@ -84,14 +84,14 @@ function getShip(RAPIER, world, model, translation, scale) {
 
           // The magnitude of the restoring torque
           // This is a simplified model. A more accurate one would involve something called metacentric height (according to wikipedia, I am not a naval engineer)
-          const torqueMagnitude = angle * restoringForceMultiplier;
+          const torqueMagnitude = angle * 2000;
 
-          const rapierTorque = new RAPIER.Vector3(
+          const torque = new RAPIER.Vector3(
                 rotationAxis.x * torqueMagnitude,
                 rotationAxis.y * torqueMagnitude,
                 rotationAxis.z * torqueMagnitude
           );
-          rigid.addTorque(rapierTorque, true);
+          rigid.addTorque(torque, true);
         }
 
         // Angular Damping 

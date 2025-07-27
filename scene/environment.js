@@ -7,6 +7,7 @@ export function loadEnvironment(scene, path, callback = () => {}) {
     texture.mapping = THREE.EquirectangularReflectionMapping
     scene.background = texture
     scene.environment = texture // Immage-Based Lighting (IBL)
+    scene.environmentIntensity = 0.6 // Reduce intensity of scene lighting
     callback(texture)
   })
 }
