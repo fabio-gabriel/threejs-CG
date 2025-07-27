@@ -1,14 +1,29 @@
 import * as THREE from "three";
 
 function getBody(RAPIER, world, model, translation, scale, randomPositions = false) {
+    const mesh = model.clone();
+    mesh.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+      }
+    });
+    mesh.scale.setScalar(scale);
+  
     const boundingBox = new THREE.Box3() // Find object's size
-    boundingBox.setFromObject(model)
-    const size = new THREE.Vector3()
-    boundingBox.getSize(size)
+    boundingBox.setFromObject(mesh)
+    const modelSize = new THREE.Vector3()
+    boundingBox.getSize(modelSize)
 
-    const colliderSize = size;
+    const colliderHalfExtents = {
+        x: modelSize.x * 0.5,
+        y: modelSize.y * 0.5,
+        z: modelSize.z * 0.5
+    };
+
     const range = 200;
-    const density = scale;
+    const density = scale * 10; // Try to find a more realistic weight/density
+
+    // For multiple ships
     let x = Math.random() * range - range / 2;
     let y = Math.random() * 0.01 + 5;
     let z = Math.random() * range - range / 2;
@@ -20,16 +35,8 @@ function getBody(RAPIER, world, model, translation, scale, randomPositions = fal
         rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic().setTranslation(translation[0], translation[1], translation[2])
     }
     let rigid = world.createRigidBody(rigidBodyDesc);
-    let colliderDesc = RAPIER.ColliderDesc.cuboid(colliderSize.x, colliderSize.y, colliderSize.z).setDensity(density);
+    let colliderDesc = RAPIER.ColliderDesc.cuboid(colliderHalfExtents.x, colliderHalfExtents.y, colliderHalfExtents.z).setDensity(density);
     world.createCollider(colliderDesc, rigid);
-
-    const mesh = model.clone();
-    mesh.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-      }
-    });
-    mesh.scale.setScalar(scale);
     
     function update (t) {
       rigid.resetForces(true);
@@ -44,12 +51,12 @@ function getBody(RAPIER, world, model, translation, scale, randomPositions = fal
       let submergedDepth = Math.max(0, 3 - shipBottomY); // How far below water the bottom is. Water level is set to 3 because I am only approximating buoyancy and the values are not perfect.
 
       // This is a real rough approximation of volume
-      const estimatedSubmergedVolume = submergedDepth * (colliderSize.x * colliderSize.z); // Assuming a cube base
+      const estimatedSubmergedVolume = submergedDepth * (modelSize.x * modelSize.z); // Assuming a cube base
       let buoyancyForceMagnitude = estimatedSubmergedVolume * 1000 * Math.abs(9.81); // Buoyancy formula
 
       // Apply the upward buoyant force
       if (submergedDepth > 0) {
-        const waveInfluence = Math.random() * 2 - 1 // Small sine wave for bobbing
+        const waveInfluence = Math.random() * 2 - 1 // Randomize the influence to add some bobbing to simulate waves
         buoyancyForceMagnitude *= (1 + waveInfluence); // Apply variation to the force
 
         const buoyancyForce = new RAPIER.Vector3(0, buoyancyForceMagnitude, 0);
