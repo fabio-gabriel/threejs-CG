@@ -40,7 +40,7 @@ function animate(t = 0) {
     requestAnimationFrame(animate)
     if (water) {water.material.uniforms['time'].value += 0.5 / 60.0} // water
     world.step()
-    bodies.forEach(b => b.update(t * 0.001))
+    bodies.forEach(b => b.update(t))
     // mesh.scale.setScalar(Math.cos(t * 0.001) + 0.5)
     renderer.render(scene, camera)
     controls.update()
