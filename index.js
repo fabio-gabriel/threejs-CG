@@ -5,7 +5,7 @@ import { createControls } from './scene/controls.js'
 import { loadEnvironment } from './scene/environment.js'
 import { createWater } from './scene/water.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { getBody } from './scene/getBodies.js'
+import { getShip } from './scene/getShipBody.js'
 const renderer = new THREE.WebGLRenderer({antialias: true})
 renderer.outputColorSpace = THREE.SRGBColorSpace
 renderer.setSize(window.innerWidth, window.innerHeight)
@@ -30,11 +30,10 @@ ship.traverse(child => {
 
 const numBodies = 1;
 const bodies = [];
-for (let i = 0; i < numBodies; i++) {
-  const body = getBody(RAPIER, world, ship, [0, 10, -7], 0.1);
-  bodies.push(body);
-  scene.add(body.mesh);
-}
+
+const body = getShip(RAPIER, world, ship, [0, 10, -7], 0.1);
+bodies.push(body);
+scene.add(body.mesh);
 
 function animate(t = 0) {
     requestAnimationFrame(animate)

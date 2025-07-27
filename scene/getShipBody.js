@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-function getBody(RAPIER, world, model, translation, scale, randomPositions = false) {
+function getShip(RAPIER, world, model, translation, scale) {
     const mesh = model.clone();
     mesh.traverse((child) => {
       if (child.isMesh) {
@@ -23,17 +23,9 @@ function getBody(RAPIER, world, model, translation, scale, randomPositions = fal
     const range = 200;
     const density = scale * 10; // Try to find a more realistic weight/density
 
-    // For multiple ships
-    let x = Math.random() * range - range / 2;
-    let y = Math.random() * 0.01 + 5;
-    let z = Math.random() * range - range / 2;
-
     let rigidBodyDesc = null
-    if (randomPositions) {{
-        rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic().setTranslation(x, y, z);
-    }} else {
-        rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic().setTranslation(translation[0], translation[1], translation[2])
-    }
+    rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic().setTranslation(translation[0], translation[1], translation[2])
+    
     let rigid = world.createRigidBody(rigidBodyDesc);
     let colliderDesc = RAPIER.ColliderDesc.cuboid(colliderHalfExtents.x, colliderHalfExtents.y, colliderHalfExtents.z).setDensity(density);
     world.createCollider(colliderDesc, rigid);
@@ -117,4 +109,4 @@ function getBody(RAPIER, world, model, translation, scale, randomPositions = fal
     return { mesh, rigid, update };
   }
 
-  export { getBody };
+  export { getShip };
